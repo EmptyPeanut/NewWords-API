@@ -1,0 +1,27 @@
+version: '3'
+name: new-words-api
+services:
+  new-words-db-dev:
+    image: mysql:8.4.0
+    container_name: new-words-db-dev
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - 3307:3306
+
+  new-words-api-dev:
+    image: node:18.18.2
+    container_name: new-words-api-dev
+    working_dir: /app
+    volumes:
+      - ../../:/app
+    ports:
+      - ${PORT}:3000
+    environment:
+      NODE_ENV: ${NODE_ENV}
+    depends_on:
+      - new-words-db-dev
+    command: sh -c "npm install && npm start"
