@@ -1,5 +1,4 @@
 import {BelongsTo, Column, DataType, ForeignKey, Table, Model, Validate} from "sequelize-typescript";
-import Language from "./Language";
 import Metadata from "./Metadata";
 @Table({
     timestamps: false,
@@ -24,22 +23,22 @@ class User extends Model{
     })
     declare id: number;
 
+    @Validate({isEmail: {msg: "Incorrect email address"}, notNull: true})
     @Column({
         type: DataType.STRING,
         allowNull: false
     })
-    @Validate({isEmail: {msg: "Incorrect email address"}, notNull: true})
     declare email: string;
 
-    @Column({
-        type: DataType.STRING,
-        allowNull: false
-    })
     @Validate({
         len: {
             msg: "Password must be of 7 to 244 characters",
             args: [7, 244]
         }
+    })
+    @Column({
+        type: DataType.STRING,
+        allowNull: false
     })
     declare password: string;
 
