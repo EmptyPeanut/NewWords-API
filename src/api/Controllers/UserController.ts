@@ -6,8 +6,9 @@ import UserCreateBody from "../RequestBodies/UserCreateBody";
 const router: Router = express.Router();
 const userBusiness: UserBusiness = new UserBusiness();
 
-router.get('/', async (req: Request, res: Response, next: NextFunction) => {
-    res.json("hello");
+router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    const result = await userBusiness.getUserById(parseInt(req.params.id));
+    res.status(200).json(result);
 })
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
     const userDto = plainToInstance(UserCreateBody, req.body);

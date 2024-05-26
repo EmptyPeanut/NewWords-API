@@ -1,6 +1,6 @@
 import User from "../../database/Models/User";
 import UserCreateBody from "../../api/RequestBodies/UserCreateBody";
-import { instanceToPlain } from "class-transformer";
+import bcrypt from "bcryptjs";
 
 class UserBusiness
 {
@@ -11,8 +11,9 @@ class UserBusiness
 
     public async createUser(userBody: UserCreateBody)
     {
-        /** @todo Hash le password + créer une metadata vide (après que le user soit créé)*/
-        return await User.create({"email" :userBody.getEmail(), "password": userBody.getPassword()});
+        const hashedPwd = await bcrypt.hash(userBody.getPassword(), 10);
+        const user = await User.create({"email" :userBody.getEmail(), "password": hashedPwd});
+        return await User.findByPk(user.id);
     }
 }
 
