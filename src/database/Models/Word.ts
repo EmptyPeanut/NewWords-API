@@ -1,17 +1,29 @@
-import {BelongsTo, Column, DataType, ForeignKey, Table, Model, Validate} from "sequelize-typescript";
+import {
+    BelongsTo,
+    Column,
+    DataType,
+    ForeignKey,
+    Table,
+    Model,
+    Validate,
+    BelongsToMany,
+    HasMany
+} from "sequelize-typescript";
 import Language from "./Language";
 import Metadata from "./Metadata";
-import {CreationOptional} from "sequelize";
+import {CreationOptional, NonAttribute} from "sequelize";
 import User from "./User";
+import UserWord from "./UserWord";
+import Definition from "./Definition";
 
 @Table({
-    timestamps: true,
+    timestamps: false,
     tableName: "word",
     modelName: "Word",
     underscored: true,
     defaultScope: {
         attributes: {
-            exclude: ['languageId', 'userId']
+            exclude: ['languageId']
         },
         include: [
             {model: Language, as: 'language'}
@@ -33,15 +45,17 @@ class Word extends Model{
     })
     declare word: string;
 
-    @ForeignKey(() => User)
     @Column({
-        type: DataType.INTEGER,
-        allowNull: false
+        type: DataType.TEXT,
+        allowNull: true
     })
-    declare userId: number;
+    declare type: string;
 
-    @BelongsTo(() => User)
-    declare user: User;
+    @HasMany(() => Definition)
+    declare definitions: NonAttribute<Definition[]>
+
+    @BelongsToMany(() => User, () => UserWord)
+    declare users: NonAttribute<User[]>;
 
     @ForeignKey(() => Language)
     @Column({
@@ -52,9 +66,6 @@ class Word extends Model{
 
     @BelongsTo(() => Language)
     declare language: Language;
-
-    declare createdAt: CreationOptional<Date>;
-    declare updatedAt: CreationOptional<Date>;
 }
 
 export default Word;

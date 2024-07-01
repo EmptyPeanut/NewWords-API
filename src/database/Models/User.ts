@@ -1,5 +1,8 @@
-import {BelongsTo, Column, DataType, ForeignKey, Table, Model, Validate} from "sequelize-typescript";
+import {BelongsTo, Column, DataType, ForeignKey, Table, Model, Validate, BelongsToMany} from "sequelize-typescript";
 import Metadata from "./Metadata";
+import {NonAttribute} from "sequelize";
+import Word from "./Word";
+import UserWord from "./UserWord";
 @Table({
     timestamps: false,
     tableName: "user",
@@ -50,6 +53,9 @@ class User extends Model{
 
     @BelongsTo(() => Metadata)
     declare metadata: Metadata;
+
+    @BelongsToMany(() => Word, () => UserWord)
+    declare words: NonAttribute<Word[]>
 }
 
 export default User;
