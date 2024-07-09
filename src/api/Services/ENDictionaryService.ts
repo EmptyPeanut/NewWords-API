@@ -15,8 +15,6 @@ export class ENDictionaryService implements DictionaryServiceInterface
 
     public transformData(response: AxiosResponse): any
     {
-        console.log(response.data);
-        
         const data = response.data[0];
         let meanings: any = [];
         data.meanings.forEach((meaning: any) => {
