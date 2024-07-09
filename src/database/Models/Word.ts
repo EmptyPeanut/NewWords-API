@@ -45,12 +45,6 @@ class Word extends Model{
     })
     declare word: string;
 
-    @Column({
-        type: DataType.TEXT,
-        allowNull: true
-    })
-    declare type: string;
-
     @HasMany(() => Definition)
     declare definitions: NonAttribute<Definition[]>
 

@@ -1,17 +1,23 @@
+import User from "../../database/Models/User";
 import { NextFunction, Request, Response } from "express";
 import * as jwt from "jsonwebtoken";
 // import { CustomError } from "./ErrorHandler";
 
 export class TokenHandler
 {
-    static tokenUserId?: number|null = null;
+    static tokenUser?: User|null = null;
+    static userLanguageIso?: string|null = null;
 
-    static handle(req: Request, res: Response, next: NextFunction)
+    static async handle(req: Request, res: Response, next: NextFunction)
     {
         const token: string = req.headers['authorization'].split(' ')[1];
         try {
             const decodedToken: string|jwt.JwtPayload = jwt.verify(token, process.env.SECRET_KEY);
-            TokenHandler.tokenUserId = TokenHandler.getDocumentProperty(decodedToken, 'id') as number;
+            const tokenUserId = TokenHandler.getDocumentProperty(decodedToken, 'id') as number;
+            const user = await User.findByPk(tokenUserId)
+            
+            TokenHandler.tokenUser = user;
+            TokenHandler.userLanguageIso = user?.metadata?.language.iso;
         } catch (err) {
             // next(new CustomError("Invalid Token", 403))
             console.log(err);

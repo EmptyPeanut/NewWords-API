@@ -4,7 +4,15 @@ import Language from "./Language";
     timestamps: false,
     tableName: "metadata",
     modelName: "Metadata",
-    underscored: true
+    underscored: true,
+    defaultScope: {
+        attributes: {
+            exclude: ['languageId']
+        },
+        include: [
+            {model: Language, as: 'language'}
+        ]
+    }
 })
 class Metadata extends Model{
 

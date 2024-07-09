@@ -20,6 +20,12 @@ class Language extends Model{
         allowNull: false
     })
     declare name: string;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: false
+    })
+    declare iso: string;
 }
 
 export default Language;

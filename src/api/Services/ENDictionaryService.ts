@@ -1,5 +1,6 @@
 import {DictionaryServiceInterface} from "../Interfaces/DictionaryServiceInterface";
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
+import { WordCreationBody } from "api/Interfaces/WordCreationBody";
 
 
 export class ENDictionaryService implements DictionaryServiceInterface
@@ -8,6 +9,30 @@ export class ENDictionaryService implements DictionaryServiceInterface
     public async getWord(word: string)
     {
         const result = await axios.get(this.baseApiUrl + word);
-        return result.data;
+
+        return this.transformData(result);
+    }
+
+    public transformData(response: AxiosResponse): any
+    {
+        console.log(response.data);
+        
+        const data = response.data[0];
+        let meanings: any = [];
+        data.meanings.forEach((meaning: any) => {
+            meanings.push({
+                partOfSpeech:   meaning.partOfSpeech,
+                example:        meaning.example,
+                antonyms:       meaning.antonyms,
+                synonyms:       meaning.synonyms,
+            })
+        })
+
+        const result: WordCreationBody = {
+            word: data.word,
+            meanings: meanings
+        }
+
+        return result;
     }
 }

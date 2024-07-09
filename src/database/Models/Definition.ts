@@ -1,9 +1,5 @@
-import {BelongsTo, Column, DataType, ForeignKey, Table, Model, Validate, BelongsToMany} from "sequelize-typescript";
-import Language from "./Language";
-import Metadata from "./Metadata";
-import {CreationOptional, NonAttribute} from "sequelize";
-import User from "./User";
-import UserWord from "./UserWord";
+import {BelongsTo, Column, DataType, ForeignKey, Table, Model} from "sequelize-typescript";
+import {NonAttribute} from "sequelize";
 import Word from "./Word";
 
 @Table({
@@ -23,7 +19,7 @@ class Definition extends Model{
 
     @Column({
         type: DataType.STRING,
-        allowNull: false
+        allowNull: true
     })
     declare example: string;
 
